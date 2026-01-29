@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Github, Linkedin, Mail, ChevronDown } from "lucide-react";
+import profilePhoto from "@/assets/profile-photo.jpg";
 
 const Hero = () => {
   return (
@@ -20,10 +21,27 @@ const Hero = () => {
       />
 
       <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
+        {/* Profile Photo */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+          className="mb-8"
+        >
+          <div className="relative inline-block">
+            <div className="absolute inset-0 bg-gradient-to-r from-glow-cyan via-glow-purple to-glow-pink rounded-full blur-lg opacity-60 animate-pulse" />
+            <img 
+              src={profilePhoto} 
+              alt="Suyash Belhekar"
+              className="relative w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full object-cover border-4 border-primary/30 shadow-2xl"
+            />
+          </div>
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
         >
           <p className="text-primary font-mono text-sm md:text-base mb-4 tracking-widest">
             {"<Hello World />"}
