@@ -1,13 +1,31 @@
 import { motion } from "framer-motion";
 import { Mail, Phone, Github, Linkedin, Send } from "lucide-react";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Open mailto with form data
+    const mailtoLink = `mailto:suyashbelhekar88@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`)}`;
+    window.location.href = mailtoLink;
+  };
+
   return (
     <section id="contact" className="py-24 px-6 relative">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-t from-glow-cyan/5 via-transparent to-transparent pointer-events-none" />
 
-      <div className="max-w-4xl mx-auto relative z-10">
+      <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -18,48 +36,166 @@ const Contact = () => {
           <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
             Get In <span className="text-gradient">Touch</span>
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-glow-cyan to-glow-purple mx-auto rounded-full" />
-          <p className="text-muted-foreground mt-4 max-w-xl mx-auto">
-            I'm currently looking for new opportunities. Whether you have a question or just want to say hi, feel free to reach out!
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            Have a project in mind or want to collaborate? Let's connect and build something amazing together.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Contact Info */}
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="glass rounded-2xl p-8 glow-border h-full">
-              <h3 className="font-display text-xl mb-6 text-primary">Contact Information</h3>
-              
-              <div className="space-y-6">
-                <a
-                  href="mailto:suyashbelhekar88@gmail.com"
-                  className="flex items-center gap-4 group"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <Mail className="w-5 h-5 text-primary" />
+            <div className="rounded-2xl border border-primary/20 bg-background/50 p-8">
+              <h3 className="font-display text-xl mb-6">Send a Message</h3>
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs text-muted-foreground uppercase tracking-wider mb-2 block">
+                      Name
+                    </label>
+                    <Input
+                      type="text"
+                      placeholder="Your name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="bg-muted/30 border-border/50 focus:border-primary font-mono"
+                      required
+                    />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Email</p>
-                    <p className="font-medium group-hover:text-primary transition-colors">
-                      suyashbelhekar88@gmail.com
-                    </p>
+                    <label className="text-xs text-muted-foreground uppercase tracking-wider mb-2 block">
+                      Email
+                    </label>
+                    <Input
+                      type="email"
+                      placeholder="your@email.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="bg-muted/30 border-border/50 focus:border-primary font-mono"
+                      required
+                    />
                   </div>
-                </a>
+                </div>
 
-                <a href="tel:+917058418077" className="flex items-center gap-4 group">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                <div>
+                  <label className="text-xs text-muted-foreground uppercase tracking-wider mb-2 block">
+                    Subject
+                  </label>
+                  <Input
+                    type="text"
+                    placeholder="Project inquiry"
+                    value={formData.subject}
+                    onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                    className="bg-muted/30 border-border/50 focus:border-primary font-mono"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs text-muted-foreground uppercase tracking-wider mb-2 block">
+                    Message
+                  </label>
+                  <Textarea
+                    placeholder="Tell me about your project..."
+                    value={formData.message}
+                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    className="bg-muted/30 border-border/50 focus:border-primary font-mono min-h-[120px] resize-none"
+                    required
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full bg-primary/10 border border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold py-6"
+                >
+                  <Send className="w-4 h-4 mr-2" />
+                  SEND MESSAGE
+                </Button>
+              </form>
+            </div>
+          </motion.div>
+
+          {/* Right Side - Terminal + Quick Connect */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="space-y-6"
+          >
+            {/* Terminal Window */}
+            <div className="rounded-2xl border border-primary/20 bg-background/50 overflow-hidden">
+              {/* Terminal Header */}
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-border/50">
+                <div className="w-3 h-3 rounded-full bg-red-500" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                <div className="w-3 h-3 rounded-full bg-green-500" />
+                <span className="ml-2 text-sm text-muted-foreground font-mono">
+                  contact@suyash:~$ connect
+                </span>
+              </div>
+
+              {/* Terminal Content */}
+              <div className="p-6 font-mono text-sm space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-primary">$</span>
+                  <span className="text-primary">ping</span>
+                  <span className="text-foreground">availability</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-primary">✓</span>
+                  <span className="text-primary">Status:</span>
+                  <span className="text-primary">Available for opportunities</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-primary">✓</span>
+                  <span className="text-primary">Response time:</span>
+                  <span className="text-primary">Within 24 hours</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-primary">✓</span>
+                  <span className="text-primary">Open to:</span>
+                  <span className="text-primary">Freelance, Internships, Collaborations</span>
+                </div>
+                <div className="flex items-center gap-1 mt-2">
+                  <span className="w-2 h-4 bg-primary animate-pulse" />
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Connect */}
+            <div className="rounded-2xl border border-primary/20 bg-background/50 p-6">
+              <h3 className="font-display text-lg font-semibold mb-4">Quick Connect</h3>
+
+              <div className="space-y-3">
+                <a
+                  href="tel:+917058418077"
+                  className="flex items-center gap-4 p-4 rounded-xl border border-border/50 hover:border-primary/50 transition-colors group"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Phone className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">Phone</p>
-                    <p className="font-medium group-hover:text-primary transition-colors">
-                      +91 7058418077
-                    </p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider">Phone</p>
+                    <p className="font-medium">+91 7058418077</p>
+                  </div>
+                </a>
+
+                <a
+                  href="mailto:suyashbelhekar88@gmail.com"
+                  className="flex items-center gap-4 p-4 rounded-xl border border-border/50 hover:border-primary/50 transition-colors group"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Mail className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider">Email</p>
+                    <p className="font-medium">suyashbelhekar88@gmail.com</p>
                   </div>
                 </a>
 
@@ -67,16 +203,14 @@ const Contact = () => {
                   href="https://github.com/suyashbelhekar"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 group"
+                  className="flex items-center gap-4 p-4 rounded-xl border border-border/50 hover:border-primary/50 transition-colors group"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Github className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">GitHub</p>
-                    <p className="font-medium group-hover:text-primary transition-colors">
-                      suyashbelhekar
-                    </p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider">GitHub</p>
+                    <p className="font-medium">github.com/suyashbelhekar</p>
                   </div>
                 </a>
 
@@ -84,45 +218,17 @@ const Contact = () => {
                   href="https://www.linkedin.com/in/suyash-belhekar-3abbb5333"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 group"
+                  className="flex items-center gap-4 p-4 rounded-xl border border-border/50 hover:border-primary/50 transition-colors group"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Linkedin className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm text-muted-foreground">LinkedIn</p>
-                    <p className="font-medium group-hover:text-primary transition-colors">
-                      Suyash Belhekar
-                    </p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider">LinkedIn</p>
+                    <p className="font-medium">linkedin.com/in/suyash-belhekar</p>
                   </div>
                 </a>
               </div>
-            </div>
-          </motion.div>
-
-          {/* Quick Message */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <div className="glass rounded-2xl p-8 glow-border h-full flex flex-col">
-              <h3 className="font-display text-xl mb-6 text-primary">Let's Connect</h3>
-              
-              <p className="text-muted-foreground mb-8 flex-1">
-                I'm always excited to discuss new projects, creative ideas, or opportunities 
-                to be part of your vision. Feel free to reach out through any of my social 
-                platforms or drop me an email!
-              </p>
-
-              <a
-                href="mailto:suyashbelhekar88@gmail.com"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-glow-cyan to-glow-purple rounded-xl font-semibold text-primary-foreground hover:opacity-90 transition-opacity group"
-              >
-                <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                Send Message
-              </a>
             </div>
           </motion.div>
         </div>
