@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
-import { Mail, Phone, Github, Linkedin, Send } from "lucide-react";
+import { Mail, Phone, Github, Linkedin, Send, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/hooks/use-toast";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -12,12 +13,44 @@ const Contact = () => {
     subject: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Open mailto with form data
-    const mailtoLink = `mailto:suyashbelhekar88@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`)}`;
-    window.location.href = mailtoLink;
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("https://formspree.io/f/mdazpzky", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Message sent!",
+          description: "Thanks for reaching out. I'll get back to you soon.",
+        });
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        throw new Error("Failed to send message");
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -111,10 +144,20 @@ const Contact = () => {
 
                 <Button
                   type="submit"
-                  className="w-full bg-primary/10 border border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold py-6"
+                  disabled={isSubmitting}
+                  className="w-full bg-primary/10 border border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold py-6 disabled:opacity-50"
                 >
-                  <Send className="w-4 h-4 mr-2" />
-                  SEND MESSAGE
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      SENDING...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 mr-2" />
+                      SEND MESSAGE
+                    </>
+                  )}
                 </Button>
               </form>
             </div>
@@ -187,7 +230,7 @@ const Contact = () => {
                 </a>
 
                 <a
-                  href="mailto:suyashbelhekar88@gmail.com"
+                  href="mailto:suyashbelhekar1@gmail.com"
                   className="flex items-center gap-4 p-4 rounded-xl border border-border/50 hover:border-primary/50 transition-colors group"
                 >
                   <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -195,7 +238,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground uppercase tracking-wider">Email</p>
-                    <p className="font-medium">suyashbelhekar88@gmail.com</p>
+                    <p className="font-medium">suyashbelhekar1@gmail.com</p>
                   </div>
                 </a>
 
