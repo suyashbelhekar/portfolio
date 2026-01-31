@@ -1,12 +1,7 @@
 
 ## Project info
 
-**URL**: 
-
-## How can I edit this code?
-
-There are several ways of editing your application.
-
+**URL**:  https://suyashbelhekar.github.io/portfolio/
 
 **Use your preferred IDE**
 
